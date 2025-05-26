@@ -63,15 +63,20 @@ func TestClient(t *testing.T) {
 
 	client := New(testServer.URL)
 
-	err := client.CreateUser("jason", 21)
+	resp, err := client.CreateUser("jason", 21)
 	require.NoError(t, err)
+	require.Equal(t, fmt.Sprintf(createResponse, "jason", 21), resp)
 
-	err = client.ReadUser("jason")
+	resp, err = client.ReadUser("jason")
 	require.NoError(t, err)
+	require.Equal(t, fmt.Sprintf(readResponse, "jason", 21), resp)
 
-	err = client.UpdateUser("jason", 22)
+	resp, err = client.UpdateUser("jason", 22)
 	require.NoError(t, err)
+	require.Equal(t, fmt.Sprintf(updateResponse, "jason", 22), resp)
 
-	err = client.DeleteUser("jason")
+	resp, err = client.DeleteUser("jason")
 	require.NoError(t, err)
+	require.Equal(t, fmt.Sprintf(deleteResponse, "jason"), resp)
+
 }

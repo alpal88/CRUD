@@ -3,7 +3,7 @@ package pkg
 const (
 	CREATEADDRROUTE = "/users/create"
 	USERADDROUTE    = "/users/"
-	REGULARURL      = "https://localhost:8080"
+	REGULARURL      = "http://localhost:8080"
 )
 
 type HttpData struct {

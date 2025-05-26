@@ -3,6 +3,7 @@ package main
 import (
 	"Desktop/golangProjects/CRUD/pkg/client"
 	"flag"
+	"fmt"
 	"log"
 )
 
@@ -39,9 +40,9 @@ func main() {
 	flag.StringVar(&user.Name, "name", "", "this is the name of the user")
 	flag.IntVar(&user.Age, "age", -1, "this is the age of the user")
 	flag.BoolVar(&user.Create, "create", false, "this is the operation that creates a user")
-	flag.BoolVar(&user.Create, "read", false, "this is the operation that reads a user's data")
-	flag.BoolVar(&user.Create, "update", false, "this is the operation that updates a user's data")
-	flag.BoolVar(&user.Create, "delete", false, "this is the operation that deletes a user")
+	flag.BoolVar(&user.Read, "read", false, "this is the operation that reads a user's data")
+	flag.BoolVar(&user.Update, "update", false, "this is the operation that updates a user's data")
+	flag.BoolVar(&user.Delete, "delete", false, "this is the operation that deletes a user")
 
 	flag.Parse()
 
@@ -52,20 +53,40 @@ func main() {
 	if user.Name == "" {
 		log.Panic("no name was inputted")
 	}
-	client := client.New("")
+	c := client.New("")
 	if user.Age == -1 && (user.Create || user.Update) {
 		log.Panic("must input age (non-negative) as well")
 	}
 	name := user.Name
 	age := user.Age
 	if user.Create {
-		client.CreateUser(name, age)
+		resp, err := c.CreateUser(name, age)
+		if err != nil {
+			fmt.Printf("1: %v", err)
+			log.Panic("error in creating a user")
+		}
+		fmt.Println(resp)
 	} else if user.Read {
-		client.ReadUser(name)
+		resp, err := c.ReadUser(name)
+		if err != nil {
+			fmt.Printf("1: %v", err)
+			log.Panicf("error in reading the user: %s: %v", name, err)
+		}
+		fmt.Println(resp)
 	} else if user.Update {
-		client.UpdateUser(name, age)
+		resp, err := c.UpdateUser(name, age)
+		if err != nil {
+			fmt.Printf("1: %v", err)
+			log.Panicf("error in updating the user: %s: %v", name, err)
+		}
+		fmt.Println(resp)
 	} else if user.Delete {
-		client.DeleteUser(name)
+		resp, err := c.DeleteUser(name)
+		if err != nil {
+			fmt.Printf("1: %v", err)
+			log.Panicf("error in creating the user: %s: %v", name, err)
+		}
+		fmt.Println(resp)
 	} else {
 		log.Panicf("no options (create, read, update, or delete) were selected for this script")
 	}
