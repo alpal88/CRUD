@@ -62,28 +62,24 @@ func main() {
 	if user.Create {
 		resp, err := c.CreateUser(name, age)
 		if err != nil {
-			fmt.Printf("1: %v", err)
 			log.Panic("error in creating a user")
 		}
 		fmt.Println(resp)
 	} else if user.Read {
 		resp, err := c.ReadUser(name)
 		if err != nil {
-			fmt.Printf("1: %v", err)
 			log.Panicf("error in reading the user: %s: %v", name, err)
 		}
 		fmt.Println(resp)
 	} else if user.Update {
 		resp, err := c.UpdateUser(name, age)
 		if err != nil {
-			fmt.Printf("1: %v", err)
 			log.Panicf("error in updating the user: %s: %v", name, err)
 		}
 		fmt.Println(resp)
 	} else if user.Delete {
 		resp, err := c.DeleteUser(name)
 		if err != nil {
-			fmt.Printf("1: %v", err)
 			log.Panicf("error in creating the user: %s: %v", name, err)
 		}
 		fmt.Println(resp)
