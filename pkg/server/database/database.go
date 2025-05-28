@@ -12,7 +12,7 @@ import (
 
 var (
 	_               Database = &boltDB{}
-	errUserNotFound          = goErrors.New("user not found")
+	ErrUserNotFound          = goErrors.New("user not found")
 )
 
 const (
@@ -50,7 +50,7 @@ func (b *boltDB) Read(key string) (string, error) {
 		}
 		val := bucket.Get([]byte(key))
 		if val == nil {
-			return errUserNotFound
+			return ErrUserNotFound
 		}
 		value = string(val)
 		return nil

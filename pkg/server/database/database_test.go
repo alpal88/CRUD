@@ -27,7 +27,7 @@ func TestDB(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "21", ageAsString)
 	_, err = boltDB.Read("jesus")
-	require.Error(t, err, errUserNotFound)
+	require.Error(t, err, ErrUserNotFound)
 	err = boltDB.Write("jason", "27")
 	require.NoError(t, err)
 	ageAsString, err = boltDB.Read("jason")
