@@ -89,27 +89,27 @@ func TestClient(t *testing.T) {
 
 	c, err := New(conn)
 	require.NoError(t, err)
-	resp, err := c.Create("jason", 21)
+	resp, err := c.CreateUser("jason", 21)
 	require.NoError(t, err)
 	require.Equal(t, "user jason age 21 has been successfully created", resp)
 
-	resp, err = c.Read("jason")
+	resp, err = c.ReadUser("jason")
 	require.NoError(t, err)
 	require.Equal(t, "user jason's age is 21", resp)
 
-	resp, err = c.Read("j")
+	resp, err = c.ReadUser("j")
 	require.NoError(t, err)
 	require.Equal(t, "user j not found in our database", resp)
 
-	resp, err = c.Update("jason", 27)
+	resp, err = c.UpdateUser("jason", 27)
 	require.NoError(t, err)
 	require.Equal(t, "user jason's new age is 27", resp)
 
-	resp, err = c.Delete("jason")
+	resp, err = c.DeleteUser("jason")
 	require.NoError(t, err)
 	require.Equal(t, "deleting user jason from the database", resp)
 
-	resp, err = c.Delete("jason")
+	resp, err = c.DeleteUser("jason")
 	require.NoError(t, err)
 	require.Equal(t, "error in deleting from the database", resp)
 }

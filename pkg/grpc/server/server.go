@@ -55,6 +55,7 @@ func (s *Server) Create(ctx context.Context, in *pb.UserWriteReq) (*pb.DatabaseR
 			ErrMessage: ErrInCreate.Error(),
 		}, nil
 	}
+	log.Printf("succesfully create user %s age %d", name, age)
 	return &pb.DatabaseResp{Success: true, Message: fmt.Sprintf(CreateMessage, name, age), ErrMessage: ""}, nil
 }
 
@@ -80,6 +81,7 @@ func (s *Server) Read(ctx context.Context, in *pb.UserReadReq) (*pb.DatabaseResp
 			ErrMessage: ErrInRead.Error(),
 		}, nil
 	}
+	log.Printf("user %s is age %s", name, age)
 	return &pb.DatabaseResp{Success: true, Message: fmt.Sprintf(ReadMessage, name, age), ErrMessage: ""}, nil
 }
 
@@ -95,13 +97,14 @@ func (s *Server) Update(ctx context.Context, in *pb.UserWriteReq) (*pb.DatabaseR
 	}
 	err := s.db.Write(name, strconv.Itoa(int(age)))
 	if err != nil {
-		log.Printf("error in reading from the database: %v", err)
+		log.Printf("error in updating the database: %v", err)
 		return &pb.DatabaseResp{
 			Success:    false,
 			Message:    "",
 			ErrMessage: ErrInUpdate.Error(),
 		}, nil
 	}
+	log.Printf("succesfully updated user %s's age to %d", name, age)
 	return &pb.DatabaseResp{Success: true, Message: fmt.Sprintf(UpdateMessage, name, age), ErrMessage: ""}, nil
 }
 
@@ -116,12 +119,13 @@ func (s *Server) Delete(ctx context.Context, in *pb.UserReadReq) (*pb.DatabaseRe
 	}
 	err := s.db.Delete(name)
 	if err != nil {
-		log.Printf("error in reading from the database: %v", err)
+		log.Printf("error in deleting from the database: %v", err)
 		return &pb.DatabaseResp{
 			Success:    false,
 			Message:    "",
 			ErrMessage: ErrInDelete.Error(),
 		}, nil
 	}
+	log.Printf("sucessfully deleted user %s from the database", name)
 	return &pb.DatabaseResp{Success: true, Message: fmt.Sprintf(DeleteMessage, name), ErrMessage: ""}, nil
 }

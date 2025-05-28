@@ -26,7 +26,7 @@ func New(conn *grpc.ClientConn) (*Client, error) {
 	}, nil
 }
 
-func (c *Client) Create(name string, age int) (string, error) {
+func (c *Client) CreateUser(name string, age int) (string, error) {
 	if name == "" || age == -1 {
 		return noNameOrAgeMsg, errors.New("no age or name")
 	}
@@ -48,7 +48,7 @@ func (c *Client) Create(name string, age int) (string, error) {
 	return resp.ErrMessage, nil
 }
 
-func (c *Client) Read(name string) (string, error) {
+func (c *Client) ReadUser(name string) (string, error) {
 	if name == "" {
 		return noNameMsg, errors.New("no name")
 	}
@@ -68,7 +68,7 @@ func (c *Client) Read(name string) (string, error) {
 	return resp.ErrMessage, nil
 }
 
-func (c *Client) Update(name string, age int) (string, error) {
+func (c *Client) UpdateUser(name string, age int) (string, error) {
 	if name == "" || age == -1 {
 		return noNameOrAgeMsg, errors.New("no age or name")
 	}
@@ -90,7 +90,7 @@ func (c *Client) Update(name string, age int) (string, error) {
 	return resp.ErrMessage, nil
 }
 
-func (c *Client) Delete(name string) (string, error) {
+func (c *Client) DeleteUser(name string) (string, error) {
 	if name == "" {
 		return noNameMsg, errors.New("no name")
 	}

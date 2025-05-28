@@ -1,11 +1,26 @@
 package main
 
 import (
-	"Desktop/golangProjects/CRUD/pkg/client"
+	grpClient "Desktop/golangProjects/CRUD/pkg/grpc/client"
+	httpClient "Desktop/golangProjects/CRUD/pkg/http/client"
 	"flag"
 	"fmt"
 	"log"
+
+	grpc "google.golang.org/grpc"
+
+	"google.golang.org/grpc/credentials/insecure"
 )
+
+type Client interface {
+	CreateUser(name string, age int) (string, error)
+	ReadUser(name string) (string, error)
+	UpdateUser(name string, age int) (string, error)
+	DeleteUser(name string) (string, error)
+}
+
+var _ Client = &httpClient.Client{}
+var _ Client = &grpClient.Client{}
 
 func validateBooleanFlags(u user) bool {
 	counter := 0
@@ -32,6 +47,7 @@ type user struct {
 	Read   bool
 	Update bool
 	Delete bool
+	GRPC   bool
 }
 
 func main() {
@@ -43,6 +59,7 @@ func main() {
 	flag.BoolVar(&user.Read, "read", false, "this is the operation that reads a user's data")
 	flag.BoolVar(&user.Update, "update", false, "this is the operation that updates a user's data")
 	flag.BoolVar(&user.Delete, "delete", false, "this is the operation that deletes a user")
+	flag.BoolVar(&user.GRPC, "grpc", false, "this uses grpc if true and http if false")
 
 	flag.Parse()
 
@@ -53,7 +70,22 @@ func main() {
 	if user.Name == "" {
 		log.Panic("no name was inputted")
 	}
-	c := client.New("")
+	var c Client
+	if user.GRPC {
+		conn, err := grpc.NewClient(
+			"localhost:8080", // Replace with your server address
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
+		if err != nil {
+			log.Fatalf("error starting a grpc connection: %v", err)
+		}
+		c, err = grpClient.New(conn)
+		if err != nil {
+			log.Fatalf("error starting a grpc client: %v", err)
+		}
+	} else {
+		c = httpClient.New("")
+	}
 	if user.Age == -1 && (user.Create || user.Update) {
 		log.Panic("must input age (non-negative) as well")
 	}

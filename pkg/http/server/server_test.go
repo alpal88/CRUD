@@ -2,7 +2,7 @@ package server
 
 import (
 	"Desktop/golangProjects/CRUD/pkg"
-	"Desktop/golangProjects/CRUD/pkg/server/database"
+	"Desktop/golangProjects/CRUD/pkg/database"
 	"bytes"
 	"encoding/json"
 	"fmt"

@@ -2,10 +2,10 @@ package main
 
 import (
 	"Desktop/golangProjects/CRUD/pkg"
-	"Desktop/golangProjects/CRUD/pkg/server/database"
-	"Desktop/golangProjects/CRUD/pkg/server/grpc"
-	server "Desktop/golangProjects/CRUD/pkg/server/http"
-	pb "Desktop/golangProjects/CRUD/proto"
+	"Desktop/golangProjects/CRUD/pkg/database"
+	pb "Desktop/golangProjects/CRUD/pkg/grpc/proto"
+	grpc "Desktop/golangProjects/CRUD/pkg/grpc/server"
+	server "Desktop/golangProjects/CRUD/pkg/http/server"
 	"fmt"
 	"log"
 	"net"
@@ -16,8 +16,12 @@ import (
 	rpc "google.golang.org/grpc"
 )
 
+var (
+	databasePath = "/Users/alexpaley/Desktop/golangProjects/CRUD/pkg/database/database.db"
+)
+
 func grpcMain() {
-	db, err := database.New("/Users/alexpaley/Desktop/golangProjects/CRUD/pkg/server/database/database.db", 0666, nil)
+	db, err := database.New(databasePath, 0666, nil)
 	if err != nil {
 		log.Fatalf("unable to start database: %v", err)
 	}
@@ -32,11 +36,10 @@ func grpcMain() {
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("unable to serve due to err: %v", err)
 	}
-
 }
 
 func httpMain() {
-	db, err := database.New("/Users/alexpaley/Desktop/golangProjects/CRUD/pkg/server/database/database.db", 0666, nil)
+	db, err := database.New(databasePath, 0666, nil)
 	if err != nil {
 		log.Panicf("unable to start database: %v", err)
 	}

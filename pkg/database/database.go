@@ -85,6 +85,10 @@ func (b *boltDB) Delete(key string) error {
 		if bucket == nil {
 			return errors.ErrBucketNotFound
 		}
+		val := bucket.Get([]byte(key))
+		if val == nil {
+			return fmt.Errorf("no user %s in the database", key)
+		}
 		err := bucket.Delete([]byte(key))
 		if err != nil {
 			return fmt.Errorf("error in deleting key %s from database: %w", key, err)
